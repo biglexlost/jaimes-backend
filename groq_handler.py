@@ -49,5 +49,13 @@ You are J.A.I.M.E.S., the Joint AI Mechanic Executive Specialist.
             json=payload
         )
 
-        result = response.json()
-        return result.get("choices", [{}])[0].get("message", {}).get("content", "No Groq response.")
+    result = response.json()
+
+    # Debug: log the raw Groq result
+    print("GROQ RAW RESPONSE:", result)
+
+    # Smart fallback
+    if "choices" in result and result["choices"]:
+        return result["choices"][0]["message"]["content"]
+    else:
+        return f"Groq error: {result}"
