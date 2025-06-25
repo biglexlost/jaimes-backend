@@ -1,7 +1,7 @@
 import os
 import httpx
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = os.getenv("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")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
 async def generate_diagnosis(data):
