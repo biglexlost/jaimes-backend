@@ -126,4 +126,4 @@ response = await httpx.post(
 )
 
 result = response.json()
-return result["choices"][0]["message"]["content"]
+return result.get("choices", [{}])[0].get("message", {}).get("content", "Sorry, I couldn't process that request.")
