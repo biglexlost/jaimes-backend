@@ -1,7 +1,7 @@
 import os
 import httpx
 
-GROQ_API_KEY = os.getenv("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")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
 async def generate_diagnosis(data):
@@ -109,3 +109,21 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
 """ .format(**data)
+response = await httpx.post(
+    "https://api.groq.com/openai/v1/chat/completions",
+    headers={
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "model": GROQ_MODEL,
+        "messages": [
+            {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.3
+    }
+)
+
+result = response.json()
+return result["choices"][0]["message"]["content"]
