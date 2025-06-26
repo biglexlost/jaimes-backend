@@ -132,11 +132,17 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
-response = await httpx.post(
-    "https://api.groq.com/openai/v1/chat/completions",
-    headers={
-        "Authorization": f"Bearer {GROQ_API_KEY}",
-        "Content-Type": "application/json"
+def build_prompt_from_data(data):
+    return f"Here’s the vehicle info: {data}"
+    
+async def generate_diagnosis(data):
+    prompt = build_prompt_from_data(data)
+
+    response = await httpx.post(
+        "https://api.groq.com/openai/v1/chat/completions",
+        headers={
+            "Authorization": f"Bearer {GROQ_API_KEY}",
+            "Content-Type": "application/json"
     },
     json={
         "model": GROQ_MODEL,
@@ -150,4 +156,4 @@ response = await httpx.post(
 
 result = response.json()
 return result.get("choices", [{}])[0].get("message", {}).get("content", "Sorry, I couldn't process that request.")
-"""
+
