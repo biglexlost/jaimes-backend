@@ -133,8 +133,13 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
 def build_prompt_from_data(data):
+    import re
+
     techy_keywords = ["misfire", "compression", "camshaft", "OBD-II", "MAF sensor", "coil pack"]
-    symptoms_text = data.get("symptoms", "").lower()
+                  
+    # Clean + lowercase the symptom input for better matching
+    symptoms_text = re.sub(r"[^\w\s]", "", data.get("symptoms", "").lower())
+    
     is_techy = any(term.lower() in symptoms_text for term in techy_keywords)
 
     # Tone tweak if gearhead detected
@@ -142,7 +147,7 @@ def build_prompt_from_data(data):
         "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
         if is_techy else ""
     )
-
+                    
     # ZIP logic
     zip_code = data.get('zip_code')
     zip_disclaimer = (
@@ -161,7 +166,6 @@ A customer just called and provided the following vehicle and issue information:
 
 🛠️ Reported Symptoms:
 {data.get('symptoms', 'No symptoms provided.')}
-symptoms_text = str(data.get("symptoms", "")).lower()
 
 ⏳ Timeline of when issue started:
 {data.get('timeline', 'No timeline given.')}
@@ -172,7 +176,7 @@ symptoms_text = str(data.get("symptoms", "")).lower()
 Please interpret this info as a highly experienced auto technician would. 
 Provide a likely diagnosis or next steps the shop should take.
 """
-
+                  
 async def generate_diagnosis(data):
     prompt = build_prompt_from_data(data)
 
