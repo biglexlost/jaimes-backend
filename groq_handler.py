@@ -148,6 +148,11 @@ Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
         "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
         if is_techy else ""
     )
+from sanitize_code import sanitize_prompt_text
+
+def generate_diagnosis(prompt):
+    # continue with Groq request...
+
 def build_prompt_from_data(data):
     # Extract values
     year = data.get('year', '')
@@ -160,7 +165,20 @@ def build_prompt_from_data(data):
         "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
         "Local pricing may vary.\n\n" if not zip_code else ""
     )
+  
+# 👇 Build the prompt here
+    prompt = f"""
+    Vehicle: {year} {make} {model}
+    Mileage: {mileage}
+    VIN: {vin}
+    ZIP: {zip_code or 'Not provided'}
+    {zip_disclaimer}
+    Please analyze the reported symptoms and generate a diagnostic overview with likely issues and next steps.
+    """
 
+    # ✅ Sanitize it before returning
+    return sanitize_prompt_text(prompt)
+  
     # Keyword detection
     techy_keywords = ["misfire", "compression", "camshaft", "OBD-II", "MAF sensor", "coil pack"]
     oil_change_keywords = ["oil change", "oil", "synthetic", "conventional", "engine oil"]
@@ -227,7 +245,6 @@ async def generate_diagnosis(data):
     {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
     {"role": "user", "content": prompt},
     {"role": "system", "content": "Respond ONLY in valid JSON using the format above. Do not include anything before or after the JSON."}
-],
         ],
         "temperature": 0.3
     }
