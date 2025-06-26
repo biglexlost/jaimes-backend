@@ -132,7 +132,6 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
-"""
 response = await httpx.post(
     "https://api.groq.com/openai/v1/chat/completions",
     headers={
@@ -151,3 +150,4 @@ response = await httpx.post(
 
 result = response.json()
 return result.get("choices", [{}])[0].get("message", {}).get("content", "Sorry, I couldn't process that request.")
+"""
