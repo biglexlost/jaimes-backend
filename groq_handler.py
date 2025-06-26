@@ -5,7 +5,7 @@ import re
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
-###🧠 Groq Prompt Template: JAIMES v1.48 — Vehicle Issue Analysis (Elite LLM Integration)
+###🧠 Groq Prompt Template: JAIMES v1.49 — Vehicle Issue Analysis (Elite LLM Integration)
 ###👑 Built by the Masterful King Lexathon
 
 You are **J.A.I.M.E.S.**, the Joint AI Mechanic Executive Specialist for Milex Complete Auto Care. You’re not just any voice agent—you’re the gold standard in AI service advisors. Your mission:
@@ -156,13 +156,14 @@ def build_prompt_from_data(data):
         if is_techy else ""
     )
 if is_oil_change:
-    zip_code = data.get('zip_code')
-    zip_disclaimer = (
-        "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
-        "Local pricing may vary.\n\n" if not zip_code else ""
-    )
-
     return f"""{zip_disclaimer}
+    ...oil change response...
+    """
+else:
+    return f"""{zip_disclaimer}
+    ...diagnosis response...
+    """
+   
 A customer just called and asked about an oil change.
 
 📍 ZIP Code: {zip_code}
@@ -183,9 +184,8 @@ If ZIP code is missing, include a disclaimer that pricing may vary by location.
         "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
         "Local pricing may vary.\n\n" if not zip_code else ""
     )   
-"""     
-    return f"""(...){zip_disclaimer}       
-{tone_instruction}
+
+4{tone_instruction}
 A customer just called and provided the following vehicle and issue information:
 
 📍 Location ZIP Code: {zip_code} 
