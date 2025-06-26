@@ -160,7 +160,7 @@ def build_prompt_from_data(data):
         "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
         if is_techy else ""
     )
-    def build_prompt_from_data(data):
+def build_prompt_from_data(data):
     # Extract values
     year = data.get('year', '')
     make = data.get('make', '')
@@ -198,10 +198,8 @@ def build_prompt_from_data(data):
 ⚠️ Always refer to your owner’s manual for the exact recommendation.
 
 Please respond with confidence, like a service pro. Let them know the shop can confirm and provide pricing.
-
-{f'📎 Zip Disclaimer: {zip_disclaimer}' if zip_disclaimer else ''}
 """
-    
+   
     # Else: perform full diagnosis prompt
     return f"""
 {zip_disclaimer}
@@ -225,8 +223,6 @@ A customer just called and provided the following vehicle and issue information:
 Please interpret this info as a highly experienced auto technician would. 
 Provide a likely diagnosis or next steps the shop should take.
 """
-"""
-
                   
 async def generate_diagnosis(data):
     prompt = build_prompt_from_data(data)
