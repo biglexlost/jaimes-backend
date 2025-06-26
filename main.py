@@ -15,5 +15,7 @@ async def root():
 @app.post("/intake")
 async def intake(request: Request):
     data = await request.json()
+    print("Incoming VAPI data:", data)
+    
     response = await generate_diagnosis(data)
     return {"result": response}
