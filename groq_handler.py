@@ -5,8 +5,7 @@ import re
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
-async def generate_diagnosis(data):
-    prompt = f"""
+prompt = f"""
 🧠 Groq Prompt Template: JAIMES v2 — Vehicle Issue Analysis (Elite LLM Integration)
 
 You are **J.A.I.M.E.S.**, the Joint AI Mechanic Executive Specialist for Milex Complete Auto Care. You’re not just any voice agent—you’re the gold standard in AI service advisors. Your mission:
