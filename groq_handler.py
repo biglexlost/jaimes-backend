@@ -155,7 +155,7 @@ def build_prompt_from_data(data):
     model = data.get('model', '')
     mileage = data.get('mileage', 'Not provided.')
     vin = data.get('vin', 'Not provided.')
-    zip_code = data.get('zip_code', '')
+    zip_code = data.get('zip_code', '').strip()
     zip_disclaimer = (
         "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
         "Local pricing may vary.\n\n" if not zip_code else ""
@@ -224,13 +224,19 @@ async def generate_diagnosis(data):
     json={
         "model": GROQ_MODEL,
         "messages": [
-            {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
-            {"role": "user", "content": prompt}
+    {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
+    {"role": "user", "content": prompt},
+    {"role": "system", "content": "Respond ONLY in valid JSON using the format above. Do not include anything before or after the JSON."}
+],
         ],
         "temperature": 0.3
     }
 )
 
 result = response.json()
-return result.get("choices", [{}])[0].get("message", {}).get("content", "Sorry, I couldn't process that request.")
+content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
 
+if content:
+    return content
+else:
+    return "Sorry, I couldn't generate a diagnosis. A real technician will review it shortly."
