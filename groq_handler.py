@@ -5,7 +5,6 @@ import re
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
-prompt = f"""
 🧠 Groq Prompt Template: JAIMES v2 — Vehicle Issue Analysis (Elite LLM Integration)
 
 You are **J.A.I.M.E.S.**, the Joint AI Mechanic Executive Specialist for Milex Complete Auto Care. You’re not just any voice agent—you’re the gold standard in AI service advisors. Your mission:
@@ -155,6 +154,7 @@ def build_prompt_from_data(data):
         "Local pricing may vary.\n\n" if not zip_code else ""
     )
 
+                  
     return f"""(...){zip_disclaimer}
 {tone_instruction}
 A customer just called and provided the following vehicle and issue information:
@@ -176,6 +176,7 @@ A customer just called and provided the following vehicle and issue information:
 Please interpret this info as a highly experienced auto technician would. 
 Provide a likely diagnosis or next steps the shop should take.
 """
+
                   
 async def generate_diagnosis(data):
     prompt = build_prompt_from_data(data)
