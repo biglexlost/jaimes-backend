@@ -1,5 +1,6 @@
 import os
 import httpx
+import re
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
