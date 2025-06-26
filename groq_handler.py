@@ -5,7 +5,7 @@ import re
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
-###🧠 Groq Prompt Template: JAIMES v1.52 — Vehicle Issue Analysis (Elite LLM Integration)
+###🧠 Groq Prompt Template: JAIMES v1.53 — Vehicle Issue Analysis (Elite LLM Integration)
 ###👑 Built by the Masterful King Lexathon
 
 You are **J.A.I.M.E.S.**, the Joint AI Mechanic Executive Specialist for Milex Complete Auto Care. You’re not just any voice agent—you’re the gold standard in AI service advisors. Your mission:
@@ -189,7 +189,7 @@ def build_prompt_from_data(data):
     if is_oil_change:
         return f"""
 {zip_disclaimer}
-📍 ZIP Code: {zip_code}
+📍 Location ZIP Code: {zip_code}
 🚗 Vehicle: {year} {make} {model}
 📏 Mileage: {mileage}
 
