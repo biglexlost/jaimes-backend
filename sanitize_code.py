@@ -37,5 +37,14 @@ def main():
             if file.endswith(".py"):
                 clean_file(os.path.join(root, file))
 
+def sanitize_prompt_text(prompt):
+    for bad_char, good_char in REPLACEMENTS.items():
+        prompt = prompt.replace(bad_char, good_char)
+    return prompt
+    
+def generate_diagnosis(prompt):
+    prompt = sanitize_prompt_text(prompt)
+    # then send to Groq like before...
+
 if __name__ == "__main__":
     main()
