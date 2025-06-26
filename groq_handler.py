@@ -133,8 +133,46 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
 def build_prompt_from_data(data):
-    return f"Here’s the vehicle info: {data}"
-    
+    techy_keywords = ["misfire", "compression", "camshaft", "OBD-II", "MAF sensor", "coil pack"]
+    symptoms_text = data.get("symptoms", "").lower()
+    is_techy = any(term.lower() in symptoms_text for term in techy_keywords)
+
+    # Tone tweak if gearhead detected
+    tone_instruction = (
+        "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
+        if is_techy else ""
+    )
+
+    # ZIP logic
+    zip_code = data.get('zip_code')
+    zip_disclaimer = (
+        "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
+        "Local pricing may vary.\n\n" if not zip_code else ""
+    )
+
+    return f"""(...){zip_disclaimer}
+{tone_instruction}
+A customer just called and provided the following vehicle and issue information:
+
+📍 Location ZIP Code: {zip_code or 'Not provided.'}
+🚗 Vehicle: {data.get('year', '')} {data.get('make', '')} {data.get('model', '')}
+📏 Mileage: {data.get('mileage', 'Not provided.')}
+🆔 VIN: {data.get('vin', 'Not provided.')}
+
+🛠️ Reported Symptoms:
+{data.get('symptoms', 'No symptoms provided.')}
+symptoms_text = str(data.get("symptoms", "")).lower()
+
+⏳ Timeline of when issue started:
+{data.get('timeline', 'No timeline given.')}
+
+🔧 Recent Work Done:
+{data.get('recent_work', 'Not provided.')}
+
+Please interpret this info as a highly experienced auto technician would. 
+Provide a likely diagnosis or next steps the shop should take.
+"""
+
 async def generate_diagnosis(data):
     prompt = build_prompt_from_data(data)
 
