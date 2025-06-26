@@ -159,7 +159,7 @@ def build_prompt_from_data(data):
 {tone_instruction}
 A customer just called and provided the following vehicle and issue information:
 
-📍 Location ZIP Code: {zip_code or 'Not provided.'}
+📍 Location ZIP Code: {data.get('zip_code', 'Not provided.')} 
 🚗 Vehicle: {data.get('year', '')} {data.get('make', '')} {data.get('model', '')}
 📏 Mileage: {data.get('mileage', 'Not provided.')}
 🆔 VIN: {data.get('vin', 'Not provided.')}
