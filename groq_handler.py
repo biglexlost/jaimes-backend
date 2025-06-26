@@ -132,18 +132,6 @@ You are here to help the customer feel seen, heard, and supported. You are the b
 
 Make JAIMES the AI world’s top service advisor. Bulletproof. No BS. All class.
 
-def build_prompt_from_data(data):
-    # Define shared values
-    year = data.get('year', '')
-    make = data.get('make', '')
-    model = data.get('model', '')
-    mileage = data.get('mileage', 'Not provided.')
-    vin = data.get('vin', 'Not provided.')
-    zip_code = data.get('zip_code', '')
-    zip_disclaimer = (
-    "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
-    "Local pricing may vary.\n\n" if not zip_code else ""
-)
     # Now use these in both branches 👇
 
     techy_keywords = ["misfire", "compression", "camshaft", "OBD-II", "MAF sensor", "coil pack"]
