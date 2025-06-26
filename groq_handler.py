@@ -155,14 +155,14 @@ def build_prompt_from_data(data):
         "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
         if is_techy else ""
     )
-if is_oil_change:
-    return f"""{zip_disclaimer}
-    ...oil change response...
-    """
-else:
-    return f"""{zip_disclaimer}
-    ...diagnosis response...
-    """
+    if is_oil_change:
+        return f"""{zip_disclaimer}
+        ...oil change response...
+        """
+    else:
+        return f"""{zip_disclaimer}
+        ...diagnosis response...
+        """
    
 A customer just called and asked about an oil change.
 
@@ -185,7 +185,7 @@ If ZIP code is missing, include a disclaimer that pricing may vary by location.
         "Local pricing may vary.\n\n" if not zip_code else ""
     )   
 
-4{tone_instruction}
+{tone_instruction}
 A customer just called and provided the following vehicle and issue information:
 
 📍 Location ZIP Code: {zip_code} 
