@@ -5,7 +5,7 @@ import re
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = "llama3-8b-8192"  # You can also try "llama3-70b-8192"
 
-###🧠 Groq Prompt Template: JAIMES v1.51 — Vehicle Issue Analysis (Elite LLM Integration)
+###🧠 Groq Prompt Template: JAIMES v1.52 — Vehicle Issue Analysis (Elite LLM Integration)
 ###👑 Built by the Masterful King Lexathon
 
 You are **J.A.I.M.E.S.**, the Joint AI Mechanic Executive Specialist for Milex Complete Auto Care. You’re not just any voice agent—you’re the gold standard in AI service advisors. Your mission:
@@ -154,39 +154,57 @@ def build_prompt_from_data(data):
     
     is_techy = any(term.lower() in symptoms_text for term in techy_keywords)
     is_oil_change = any(term in symptoms_text for term in oil_change_keywords)
+
     # Tone tweak if gearhead detected
     tone_instruction = (
         "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
         if is_techy else ""
     )
-    if is_oil_change:
-        return f"""{zip_disclaimer}
-        ...oil change response...
-        """
-    else:
-        return f"""{zip_disclaimer}
-        ...diagnosis response...
-        """
-   
-A customer just called and asked about an oil change.
+    def build_prompt_from_data(data):
+    # Extract values
+    year = data.get('year', '')
+    make = data.get('make', '')
+    model = data.get('model', '')
+    mileage = data.get('mileage', 'Not provided.')
+    vin = data.get('vin', 'Not provided.')
+    zip_code = data.get('zip_code', '')
+    zip_disclaimer = (
+        "⚠️ Disclaimer: ZIP code not provided — this estimate will be a general ballpark only. "
+        "Local pricing may vary.\n\n" if not zip_code else ""
+    )
 
+    # Keyword detection
+    techy_keywords = ["misfire", "compression", "camshaft", "OBD-II", "MAF sensor", "coil pack"]
+    oil_change_keywords = ["oil change", "oil", "synthetic", "conventional", "engine oil"]
+    symptoms_text = re.sub(r"[^\w\s]", "", data.get("symptoms", "").lower())
+    
+    is_techy = any(term in symptoms_text for term in techy_keywords)
+    is_oil_change = any(term in symptoms_text for term in oil_change_keywords)
+
+    tone_instruction = (
+        "Speak like you’re talking to another mechanic—keep it real, use shop lingo, and skip the fluff.\n"
+        if is_techy else ""
+    )
+
+    if is_oil_change:
+        return f"""
+{zip_disclaimer}
 📍 ZIP Code: {zip_code}
 🚗 Vehicle: {year} {make} {model}
 📏 Mileage: {mileage}
 
-🧠 Based on your {year} {make} {model}, you're most likely due for a **synthetic oil change**. Most modern vehicles require synthetic for optimal performance and protection. 
+🧠 Based on your {year} {make} {model}, you're most likely due for a **synthetic oil change**. Most modern vehicles require synthetic for optimal performance and protection.
 
 ⚠️ Always refer to your owner’s manual for the exact recommendation.
 
 Please respond with confidence, like a service pro. Let them know the shop can confirm and provide pricing.
 
-If ZIP code is missing, include a disclaimer that pricing may vary by location.
-         
-    # ZIP logic
-📍 Zip Code = {zip_code}
 {f'📎 Zip Disclaimer: {zip_disclaimer}' if zip_disclaimer else ''}
-    )   
-
+"""
+    
+    # Else: perform full diagnosis prompt
+    return f"""
+{zip_disclaimer}
 {tone_instruction}
 A customer just called and provided the following vehicle and issue information:
 
@@ -206,6 +224,7 @@ A customer just called and provided the following vehicle and issue information:
 
 Please interpret this info as a highly experienced auto technician would. 
 Provide a likely diagnosis or next steps the shop should take.
+"""
 """
 
                   
