@@ -6,16 +6,11 @@ app = FastAPI()
 # ✅ Add a friendly root route so the base URL isn't 404
 @app.get("/")
 async def root():
-    return {
-        "message": "JAIMES backend is live and ready to diagnose 🚗🛠️",
-        "usage": "POST JSON to /intake with vehicle data"
-    }
+    return {"status": "JAIMES backend alive!"}
 
-# 🔧 Your existing POST route
-@app.post("/intake")
-async def intake(request: Request):
-    data = await request.json()
-    print("Incoming VAPI data:", data)
-    
-    response = await generate_diagnosis(data)
-    return {"result": response}
+@app.post("/chat/completions")
+async def chat_completions(request: Request):
+    payload = await request.json()
+    # assuming payload has the shape your handler expects:
+    result = await generate_diagnosis(payload)
+    return result
