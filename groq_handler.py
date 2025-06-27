@@ -224,25 +224,23 @@ Please interpret this info as a highly experienced auto technician would.
 Provide a likely diagnosis or next steps the shop should take.
 """
                   
-async def generate_diagnosis(data):
-    prompt = build_prompt_from_data(data)
-
-    response = await httpx.post(
+async with httpx.AsyncClient() as client:
+    response = await client.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json"
-    },
-    json={
-        "model": GROQ_MODEL,
-        "messages": [
-    {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
-    {"role": "user", "content": prompt},
-    {"role": "system", "content": "Respond ONLY in valid JSON using the format above. Do not include anything before or after the JSON."}
-        ],
-        "temperature": 0.3
-    }
-)
+        },
+        json={
+            "model": GROQ_MODEL,
+            "messages": [
+                {"role": "system", "content": "You are JAIMES, an expert AI service advisor."},
+                {"role": "user",   "content": prompt},
+                {"role": "system", "content": "Respond ONLY in valid JSON using the format above."}
+            ],
+            "temperature": 0.3
+        }
+    )
     response.raise_for_status()
     result = response.json()
     content = result.get("choices", [{}])[0].get("message", {}).get("content", "")
