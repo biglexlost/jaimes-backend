@@ -223,13 +223,16 @@ A customer just called and provided the following vehicle and issue information:
 Please interpret this info as a highly experienced auto technician would. 
 Provide a likely diagnosis or next steps the shop should take.
 """
-                  
-async with httpx.AsyncClient() as client:
-    response = await client.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {GROQ_API_KEY}",
-            "Content-Type": "application/json"
+
+async def generate_diagnosis(data):
+    prompt = build_prompt_from_data(data)
+
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
         },
         json={
             "model": GROQ_MODEL,
